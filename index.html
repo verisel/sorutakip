@@ -865,10 +865,11 @@
     document.getElementById('odevSliderTrack').innerHTML = '<div style="text-align:center; width:100%; padding:20px; color:#6b7280;">Yükleniyor...</div>';
     
     // Supabase'den öğrencinin ödevlerini çek
+        // Supabase'den öğrencinin ödevlerini çek
     const { data, error } = await sb
       .from('matematik_odevleri')
       .select('*')
-      .eq('student_id', activeStudentId)
+      .eq('student_id', parseInt(activeStudentId)) // <--- DÜZELTİLDİ
       .order('assign_date', { ascending: false });
 
     if (error) {
@@ -964,7 +965,7 @@
 
     // Supabase'e Ekle
     const { error } = await sb.from('matematik_odevleri').insert({
-      student_id: activeStudentId,
+      student_id: parseInt(activeStudentId),
       assign_date: assignDate,
       due_date: dueDate,
       source: source,
@@ -1177,7 +1178,7 @@
     if(!count){ alert('Kayıt yok.'); return; }
     if(!confirm(`Öğrencinin ${count} kaydı silinecek. Emin misiniz?`)) return;
 
-    const { error } = await sb.from('matematik_odevleri').delete().eq('student_id', activeStudentId);
+        const { error } = await sb.from('matematik_odevleri').delete().eq('student_id', parseInt(activeStudentId)); // <--- DÜZELTİLDİ
     if (error) { showToast('Silinemedi!', 'danger'); return; }
 
     currentSlideIndex = 0;
