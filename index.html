@@ -167,10 +167,11 @@
 
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(30, 20, 60, 0.55); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
   #numpadModal { z-index: 200; }
+  #odevNumpadModal { z-index: 200; }
   .modal-overlay.active { display: flex; }
-  .modal { background: var(--surface); border-radius: var(--radius); width: 100%; max-width: 360px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; animation: modalIn 0.2s ease-out; }
+  .modal { background: var(--surface); border-radius: var(--radius); width: 100%; max-width: 360px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; animation: modalIn 0.2s ease-out; display: flex; flex-direction: column; }
   .modal.wide { max-width: 500px; }
-  .modal.extra-wide { max-width: 1000px; height: 90vh; display: flex; flex-direction: column; }
+  .modal.extra-wide { max-width: 1000px; height: 90vh; }
   @keyframes modalIn { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
   .modal-head { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%); color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
   .modal-head h3 { font-size: 13px; font-weight: 600; }
@@ -178,9 +179,9 @@
   .modal-head.danger h3 { color: #fff; }
   .modal-close { background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 14px; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; }
   .modal-close:hover { background: rgba(255,255,255,0.28); }
-  .modal-body { padding: 16px; overflow-y: auto; }
-  .modal.extra-wide .modal-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+  .modal-body { padding: 16px; overflow-y: auto; flex: 1; }
+  .modal.extra-wide .modal-body { display: flex; flex-direction: column; overflow: hidden; padding: 12px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; flex-shrink: 0; }
 
   .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .numpad button { padding: 14px; font-size: 20px; font-weight: 700; background: #f3f4f6; color: var(--text); border-radius: var(--radius-sm); border: 2px solid #e5e7eb; cursor: pointer; }
@@ -230,19 +231,19 @@
   .logo-preview img { width: 100%; height: 100%; object-fit: cover; }
 
   /* ============ ÖDEV TAKİP İÇİN EK CSS'LER ============ */
-  .odev-form-row {display:flex; gap:12px; margin-bottom:12px; align-items:flex-end;}
-  .odev-form-group {flex:1; display:flex; flex-direction:column; gap:4px; min-width:0;}
-  .odev-form-group label{font-size:0.75rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase;}
-  .odev-form-group input, .odev-form-group select{height:36px; padding:0 8px; border:1px solid var(--border); border-radius:6px; font-size:0.85rem; background:#fff; outline:none; width:100%;}
-  .odev-source-group { display:flex; gap:4px; align-items:center; height:36px;}
+  .odev-form-row {display:flex; gap:8px; margin-bottom:8px; align-items:flex-end;}
+  .odev-form-group {flex:1; display:flex; flex-direction:column; gap:2px; min-width:0;}
+  .odev-form-group label{font-size:0.7rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase;}
+  .odev-form-group input, .odev-form-group select{height:32px; padding:0 6px; border:1px solid var(--border); border-radius:6px; font-size:0.8rem; background:#fff; outline:none; width:100%;}
+  .odev-source-group { display:flex; gap:4px; align-items:center; height:32px;}
   .odev-source-group select { flex:1; height:100%; }
-  .odev-source-group .btn { height:100%; padding: 0 12px; font-size:1rem;}
-  .odev-double-input{display:flex; gap:4px; align-items:center; height:36px;}
+  .odev-source-group .btn { height:100%; padding: 0 8px; font-size:0.9rem;}
+  .odev-double-input{display:flex; gap:4px; align-items:center; height:32px;}
   .odev-double-input input{text-align:center; height:100%; flex:1; min-width:0; cursor:pointer;}
   
-  .odev-slider-container { position: relative; width: 100%; overflow: hidden; padding: 4px 0 20px 0; }
-  .odev-slider-track { display: flex; transition: transform 0.3s ease-in-out; gap: 16px; }
-  .odev-slide { flex: 0 0 100%; min-width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .odev-slider-container { position: relative; width: 100%; overflow: hidden; padding: 4px 0 16px 0; flex: 1; display: flex; flex-direction: column;}
+  .odev-slider-track { display: flex; transition: transform 0.3s ease-in-out; gap: 16px; height: 100%;}
+  .odev-slide { flex: 0 0 100%; min-width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;}
   .odev-slider-dots { position: absolute; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
   .odev-dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; cursor: pointer; transition: all 0.2s; }
   .odev-dot.active { background: #f59e0b; transform: scale(1.3); }
@@ -266,15 +267,7 @@
   .istat-list li:last-child { border-bottom: none; }
 
   @media (max-width: 600px) {
-    .odev-form-row {gap:8px; flex-wrap:nowrap;}
-    .odev-form-group input, .odev-form-group select {font-size:0.75rem; height:32px; padding:0 4px;}
-    .odev-double-input {height:32px;}
-    .odev-source-group {height:32px;}
     .odev-nav-btn { display: none; }
-  }
-  @media (max-width: 380px) {
-    .odev-form-row {flex-wrap:wrap;}
-    .odev-form-group {min-width:100%;}
   }
 </style>
 </head>
@@ -435,10 +428,11 @@
       <h3>📋 Matematik Ödev Takibi</h3>
       <button class="modal-close" onclick="closeModal('odevModal')">✕</button>
     </div>
-    <div class="modal-body" style="padding: 16px; background: #f8fafc;">
+    <div class="modal-body">
       
-      <div style="background:#fff; border-radius:8px; border:1px solid var(--border); padding:16px; margin-bottom:16px;">
-        <h4 style="margin-bottom:12px; font-size:14px; color:#d97706;">➕ Yeni Ödev Ver</h4>
+      <!-- Form Alanı (Daha Kompakt) -->
+      <div style="background:#fff; border-radius:8px; border:1px solid var(--border); padding:12px; margin-bottom:12px; flex-shrink: 0;">
+        <h4 style="margin-bottom:8px; font-size:13px; color:#d97706;">➕ Yeni Ödev Ver</h4>
         <form id="odevForm" onsubmit="odevKaydet(event)">
           <div class="odev-form-row">
             <div class="odev-form-group">
@@ -483,20 +477,21 @@
               </select>
             </div>
           </div>
-          <div style="text-align:right; margin-top:12px;">
+          <div style="text-align:right; margin-top:8px;">
             <button type="submit" class="btn btn-primary" style="background:#d97706; border:none;">💾 Kaydet</button>
           </div>
         </form>
       </div>
 
-      <div style="background:#fff; border-radius:8px; border:1px solid var(--border); padding:16px; flex: 1; display: flex; flex-direction: column;">
+      <!-- Liste Alanı (Esnek ve Kaydırılabilir) -->
+      <div style="background:#fff; border-radius:8px; border:1px solid var(--border); padding:12px; flex: 1; display: flex; flex-direction: column; overflow: hidden;">
         
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-          <h4 style="font-size:14px; color:#d97706;">📋 Verilen Ödevler <span id="o_count" style="background:#fef3c7; color:#d97706; padding:2px 8px; border-radius:12px; font-size:12px; margin-left:4px;">0</span></h4>
-          <div style="display:flex; gap:6px;">
-            <button class="btn btn-primary btn-sm" onclick="openOdevIstatistikModal()" style="background:#4a3f8a; color:#fff; border:none;">📊 İstatistikler</button>
-            <input type="text" id="o_search" placeholder="Ara..." style="padding:6px; border:1px solid var(--border); border-radius:6px; font-size:0.8rem; width:100px;" oninput="odevRender()">
-            <button class="btn btn-danger btn-sm" onclick="odevTemizle()">Sil</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px; flex-shrink: 0;">
+          <h4 style="font-size:13px; color:#d97706;">📋 Verilen Ödevler <span id="o_count" style="background:#fef3c7; color:#d97706; padding:2px 6px; border-radius:12px; font-size:11px; margin-left:4px;">0</span></h4>
+          <div style="display:flex; gap:4px;">
+            <button class="btn btn-primary btn-sm" onclick="openOdevIstatistikModal()" style="background:#4a3f8a; color:#fff; border:none; padding:4px 8px; font-size:11px;">📊 İstatistikler</button>
+            <input type="text" id="o_search" placeholder="Ara..." style="padding:4px 6px; border:1px solid var(--border); border-radius:4px; font-size:0.75rem; width:80px;" oninput="odevRender()">
+            <button class="btn btn-danger btn-sm" onclick="odevTemizle()" style="padding:4px 8px; font-size:11px;">Sil</button>
           </div>
         </div>
 
@@ -518,7 +513,7 @@
   </div>
 </div>
 
-<!-- ============ ÖDEV SAYFA NUMPAD (YENİ) ============ -->
+<!-- ============ ÖDEV SAYFA NUMPAD (Sayfa, Süre, Soru vb. için) ============ -->
 <div class="modal-overlay" id="odevNumpadModal">
   <div class="modal">
     <div class="modal-head" style="background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);">
@@ -595,25 +590,25 @@
         <div class="odev-form-row">
           <div class="odev-form-group">
             <label>Süre (dk)</label>
-            <input type="number" id="o_evalDuration" min="1" placeholder="45" required>
+            <input type="text" id="o_evalDuration" placeholder="45" required onclick="openOdevNumpad('evalDuration')" readonly>
           </div>
           <div class="odev-form-group">
             <label>Soru Sayısı</label>
-            <input type="number" id="o_evalQuestions" min="0" placeholder="20" required>
+            <input type="text" id="o_evalQuestions" placeholder="20" required onclick="openOdevNumpad('evalQuestions')" readonly>
           </div>
         </div>
         <div class="odev-form-row">
           <div class="odev-form-group">
             <label>Doğru</label>
-            <input type="number" id="o_evalCorrect" min="0" placeholder="0" required>
+            <input type="text" id="o_evalCorrect" placeholder="0" required onclick="openOdevNumpad('evalCorrect')" readonly>
           </div>
           <div class="odev-form-group">
             <label>Yanlış</label>
-            <input type="number" id="o_evalWrong" min="0" placeholder="0" required>
+            <input type="text" id="o_evalWrong" placeholder="0" required onclick="openOdevNumpad('evalWrong')" readonly>
           </div>
           <div class="odev-form-group">
             <label>Boş</label>
-            <input type="number" id="o_evalBlank" min="0" placeholder="0" value="0">
+            <input type="text" id="o_evalBlank" placeholder="0" onclick="openOdevNumpad('evalBlank')" readonly>
           </div>
         </div>
         <div class="modal-actions" style="margin-top:20px;">
@@ -836,7 +831,7 @@
   const DEFAULT_SOURCES = ["Bilfen Soru Bankası","Mozaik Yayınları","Fenomen Yayıncılık","Sinan Kuzucu Yayınları","Ankara Yayıncılık","Sonuç Yayınları","HiperZeka","Nartest","Arı Yayıncılık","Karakutu Yayınları","Ata Yayıncılık","Tudem Yayınları","Karekök Yayınları","Hız Yayınları"];
 
   let odevRecords = []; 
-  let odevCustomSources = JSON.parse(localStorage.getItem('odevTakip_sources_v17') || '[]');
+  let odevCustomSources = JSON.parse(localStorage.getItem('odevTakip_sources_v18') || '[]');
   
   let currentSlideIndex = 0;
   let currentSliderList = [];
@@ -886,14 +881,32 @@
   });
 
   /* ====================================================
-     ÖDEV NUMPAD FONKSİYONLARI (SAYFA GİRİŞİ İÇİN)
+     ÖDEV NUMPAD FONKSİYONLARI (TÜM SAYI GİRİŞLERİ İÇİN)
      ==================================================== */
   function openOdevNumpad(targetId) {
     odevNumpadTargetId = targetId;
-    const inputEl = document.getElementById('o_' + targetId);
+    
+    // Eğer ID başında o_ yoksa ekle (HTML id'leri o_ ile başlıyor)
+    let inputId = targetId.startsWith('o_') ? targetId : 'o_' + targetId;
+    if(targetId === 'evalDuration' || targetId === 'evalQuestions' || targetId === 'evalCorrect' || targetId === 'evalWrong' || targetId === 'evalBlank') {
+       inputId = 'o_' + targetId;
+    }
+
+    const inputEl = document.getElementById(inputId);
+    if(!inputEl) return;
+    
     odevNumpadValue = inputEl.value || '';
     
-    const titles = { pageStart: '🔢 Başlangıç Sayfası', pageEnd: '🔢 Bitiş Sayfası' };
+    const titles = { 
+      pageStart: '🔢 Başlangıç Sayfası', 
+      pageEnd: '🔢 Bitiş Sayfası',
+      evalDuration: '🔢 Süre (dk)',
+      evalQuestions: '🔢 Soru Sayısı',
+      evalCorrect: '🔢 Doğru Sayısı',
+      evalWrong: '🔢 Yanlış Sayısı',
+      evalBlank: '🔢 Boş Sayısı'
+    };
+    
     document.getElementById('odevNumpadTitle').textContent = titles[targetId] || '🔢 Sayı Girin';
     updateOdevNumpadDisplay();
     document.getElementById('odevNumpadModal').classList.add('active');
@@ -919,7 +932,8 @@
   }
 
   function odevNumpadConfirm() {
-    document.getElementById('o_' + odevNumpadTargetId).value = odevNumpadValue;
+    let inputId = odevNumpadTargetId.startsWith('o_') ? odevNumpadTargetId : 'o_' + odevNumpadTargetId;
+    document.getElementById(inputId).value = odevNumpadValue;
     closeOdevNumpad();
   }
 
@@ -1002,7 +1016,7 @@
       return;
     }
     odevCustomSources.push(cleanSource);
-    localStorage.setItem('odevTakip_sources_v17', JSON.stringify(odevCustomSources));
+    localStorage.setItem('odevTakip_sources_v18', JSON.stringify(odevCustomSources));
     odevRenderSources(cleanSource); 
   }
 
@@ -1102,7 +1116,7 @@
     }
 
     document.getElementById('odevEmpty').style.display = 'none';
-    sliderContainer.style.display = 'block';
+    sliderContainer.style.display = 'flex'; // flex olarak geri aç
     currentSliderList = list;
 
     if (currentSlideIndex >= list.length) currentSlideIndex = list.length - 1;
@@ -1121,19 +1135,19 @@
       const card = document.createElement('div');
       card.className = 'odev-slide';
       card.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px dashed #e2e8f0; padding-bottom:6px;">
-          <span style="font-weight:800; color:#2563eb; font-size:0.95rem;">Ödev #${r.idNo}</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px dashed #e2e8f0; padding-bottom:4px;">
+          <span style="font-weight:800; color:#2563eb; font-size:0.9rem;">Ödev #${r.idNo}</span>
           ${odevGetStatusBadge(r)}
         </div>
-        <div style="display:grid; grid-template-columns:80px 1fr; gap:6px; font-size:0.8rem; margin-bottom:10px;">
+        <div style="display:grid; grid-template-columns:70px 1fr; gap:4px; font-size:0.75rem; margin-bottom:8px;">
           <div style="font-weight:600; color:#6b7280;">Veriliş:</div><div>${fmtDate(r.assignDate)}</div>
           <div style="font-weight:600; color:#6b7280;">Teslim:</div><div>${fmtDate(r.dueDate)}</div>
           <div style="font-weight:600; color:#6b7280;">Kaynak:</div><div>${escapeHtml(r.source)} (Syf: ${r.pageStart}-${r.pageEnd})</div>
           <div style="font-weight:600; color:#6b7280;">Konu:</div><div>${escapeHtml(r.topic)}</div>
           <div style="font-weight:600; color:#6b7280;">Alt Başlık:</div><div>${escapeHtml(r.subtopic)}</div>
         </div>
-        <div style="background:#f8fafc; padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-size:0.8rem; line-height:1.4;">
+        <div style="background:#f8fafc; padding:6px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:0.75rem; line-height:1.3;">
             ${r.isEvaluated ? `
               ⏱️${r.duration}dk / ❓${r.questions}S<br>
               <span style="color:#059669">✅${r.correct}</span> - 
@@ -1141,13 +1155,13 @@
               <span>⚪${r.blank}</span>
             ` : `<span style="color:#9ca3af; font-style:italic;">Sonuç girilmedi</span>`}
           </div>
-          <div>${r.isEvaluated ? `<span style="background:${cls}; color:${txtCls}; padding:4px 8px; border-radius:4px; font-size:0.9rem; font-weight:700;">${pct.toFixed(0)}%</span>` : ''}</div>
+          <div>${r.isEvaluated ? `<span style="background:${cls}; color:${txtCls}; padding:3px 6px; border-radius:4px; font-size:0.8rem; font-weight:700;">${pct.toFixed(0)}%</span>` : ''}</div>
         </div>
-        <div class="odev-actions">
+        <div class="odev-actions" style="margin-top:auto;">
           ${!r.isEvaluated 
-            ? `<button class="btn btn-warning" style="flex:1; background:#f59e0b; color:#fff; border:none;" onclick="odevOpenEval('${r.id}')">Değerlendir</button>` 
-            : `<button class="btn btn-outline" style="flex:1; border:1px solid #e2e8f0;" onclick="odevOpenEval('${r.id}')">Düzenle</button>`}
-          <button class="btn btn-danger" style="width:40px;" onclick="odevDelete('${r.id}')">🗑️</button>
+            ? `<button class="btn btn-warning" style="flex:1; background:#f59e0b; color:#fff; border:none; padding:6px; font-size:0.75rem;" onclick="odevOpenEval('${r.id}')">Değerlendir</button>` 
+            : `<button class="btn btn-outline" style="flex:1; border:1px solid #e2e8f0; padding:6px; font-size:0.75rem;" onclick="odevOpenEval('${r.id}')">Düzenle</button>`}
+          <button class="btn btn-danger" style="width:32px; padding:6px; font-size:0.75rem;" onclick="odevDelete('${r.id}')">🗑️</button>
         </div>
       `;
       track.appendChild(card);
