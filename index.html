@@ -26,6 +26,12 @@
   }
   html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  
+  /* Ana sayfa kaydırması engellendiğinde (modal açıkken) */
+  body.modal-open {
+    overflow: hidden !important; 
+  }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--bg);
@@ -165,7 +171,7 @@
   .empty { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
   .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
 
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(30, 20, 60, 0.55); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(30, 20, 60, 0.55); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 16px; overscroll-behavior: contain; }
   #numpadModal { z-index: 200; }
   #odevNumpadModal { z-index: 200; }
   .modal-overlay.active { display: flex; }
@@ -179,7 +185,7 @@
   .modal-head.danger h3 { color: #fff; }
   .modal-close { background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 14px; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; }
   .modal-close:hover { background: rgba(255,255,255,0.28); }
-  .modal-body { padding: 16px; overflow-y: auto; flex: 1; }
+  .modal-body { padding: 16px; overflow-y: auto; flex: 1; overscroll-behavior: contain; }
   .modal.extra-wide .modal-body { display: flex; flex-direction: column; overflow: hidden; padding: 12px; }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; flex-shrink: 0; }
 
@@ -831,7 +837,7 @@
   const DEFAULT_SOURCES = ["Bilfen Soru Bankası","Mozaik Yayınları","Fenomen Yayıncılık","Sinan Kuzucu Yayınları","Ankara Yayıncılık","Sonuç Yayınları","HiperZeka","Nartest","Arı Yayıncılık","Karakutu Yayınları","Ata Yayıncılık","Tudem Yayınları","Karekök Yayınları","Hız Yayınları"];
 
   let odevRecords = []; 
-  let odevCustomSources = JSON.parse(localStorage.getItem('odevTakip_sources_v18') || '[]');
+  let odevCustomSources = JSON.parse(localStorage.getItem('odevTakip_sources_v19') || '[]');
   
   let currentSlideIndex = 0;
   let currentSliderList = [];
@@ -886,7 +892,6 @@
   function openOdevNumpad(targetId) {
     odevNumpadTargetId = targetId;
     
-    // Eğer ID başında o_ yoksa ekle (HTML id'leri o_ ile başlıyor)
     let inputId = targetId.startsWith('o_') ? targetId : 'o_' + targetId;
     if(targetId === 'evalDuration' || targetId === 'evalQuestions' || targetId === 'evalCorrect' || targetId === 'evalWrong' || targetId === 'evalBlank') {
        inputId = 'o_' + targetId;
@@ -938,6 +943,24 @@
   }
 
   /* ====================================================
+     MODAL AÇMA / KAPAMA (Arka plan kaydırmasını engelleme)
+     ==================================================== */
+  function showModal(id) {
+    document.getElementById(id).classList.add('active');
+    document.body.classList.add('modal-open'); // Arka planı kilitle
+  }
+
+  function closeModal(id) { 
+    document.getElementById(id).classList.remove('active');
+    
+    // Eğer başka açık modal kalmadıysa arka plan kilidini kaldır
+    const openModals = document.querySelectorAll('.modal-overlay.active');
+    if (openModals.length === 0) {
+      document.body.classList.remove('modal-open');
+    }
+  }
+
+  /* ====================================================
      ÖDEV MODAL FONKSİYONLARI (SUPABASE ENTEGRE)
      ==================================================== */
   async function openOdevModal() {
@@ -947,7 +970,8 @@
       return;
     }
     
-    document.getElementById('odevModal').classList.add('active');
+    showModal('odevModal');
+    
     document.getElementById('odevSliderTrack').innerHTML = '<div style="text-align:center; width:100%; padding:20px; color:#6b7280;">Yükleniyor...</div>';
     
     // Supabase'den öğrencinin ödevlerini çek (ID tipini zorlayarak)
@@ -966,7 +990,7 @@
     // Veriyi arayüzün beklediği formata çevir
     odevRecords = data.map(r => ({
       id: r.id,
-      studentId: String(r.student_id), // String'e zorla
+      studentId: String(r.student_id), 
       idNo: null, 
       assignDate: r.assign_date,
       dueDate: r.due_date,
@@ -1016,7 +1040,7 @@
       return;
     }
     odevCustomSources.push(cleanSource);
-    localStorage.setItem('odevTakip_sources_v18', JSON.stringify(odevCustomSources));
+    localStorage.setItem('odevTakip_sources_v19', JSON.stringify(odevCustomSources));
     odevRenderSources(cleanSource); 
   }
 
@@ -1116,7 +1140,7 @@
     }
 
     document.getElementById('odevEmpty').style.display = 'none';
-    sliderContainer.style.display = 'flex'; // flex olarak geri aç
+    sliderContainer.style.display = 'flex'; 
     currentSliderList = list;
 
     if (currentSlideIndex >= list.length) currentSlideIndex = list.length - 1;
@@ -1214,7 +1238,8 @@
     document.getElementById('o_evalCorrect').value = r.correct || '';
     document.getElementById('o_evalWrong').value = r.wrong || '';
     document.getElementById('o_evalBlank').value = r.blank || 0;
-    document.getElementById('odevEvalModal').classList.add('active');
+    
+    showModal('odevEvalModal');
   }
 
   async function odevEvalKaydet(e){
@@ -1376,7 +1401,7 @@
       });
     }
 
-    document.getElementById('odevIstatistikModal').classList.add('active');
+    showModal('odevIstatistikModal');
   }
 
   /* ====================================================
@@ -1405,7 +1430,7 @@
     updateAllPinBoxes();
     const box = document.getElementById('adminPasswordDisplay');
     if (box) box.classList.remove('error');
-    document.getElementById('adminLoginModal').classList.add('active');
+    showModal('adminLoginModal');
   }
 
   function openAdminPanel() {
@@ -1414,7 +1439,7 @@
     const prev = document.getElementById('adminLogoPreview');
     if (logoBase64) prev.innerHTML = `<img src="${logoBase64}" alt="logo">`;
     else prev.innerHTML = '🏫';
-    document.getElementById('adminPanelModal').classList.add('active');
+    showModal('adminPanelModal');
   }
 
   function onLogoFileChange(e) {
@@ -1479,7 +1504,7 @@
       pendingAdminAction = 'students';
       enteredPin = '';
       updateAllPinBoxes();
-      document.getElementById('adminLoginModal').classList.add('active');
+      showModal('adminLoginModal');
       setTimeout(() => openAdminNumpad(), 100);
       return;
     }
@@ -1491,7 +1516,7 @@
     document.getElementById('newStudentNo').value = '';
     document.getElementById('newStudentName').value = '';
     renderStudentList();
-    document.getElementById('studentsModal').classList.add('active');
+    showModal('studentsModal');
   }
 
   function renderStudentList() {
@@ -1578,11 +1603,11 @@
     updatePinDots();
     updateAllPinBoxes();
     document.getElementById('numpadEnterBtn').disabled = true;
-    document.getElementById('numpadModal').classList.add('active');
+    showModal('numpadModal');
   }
 
   function closeNumpad() {
-    document.getElementById('numpadModal').classList.remove('active');
+    closeModal('numpadModal');
     document.getElementById('numpadHeader').classList.remove('danger');
     pendingDelete = null;
     enteredPin = '';
@@ -1644,7 +1669,7 @@
     if (enteredPin.length !== PIN_LENGTH) { showToast('Şifre 4 haneli olmalı', 'warn'); return; }
     const pin = enteredPin;
     const target = numpadTarget;
-    document.getElementById('numpadModal').classList.remove('active');
+    closeModal('numpadModal');
     document.getElementById('numpadHeader').classList.remove('danger');
     enteredPin = '';
     updatePinDots();
@@ -1985,7 +2010,7 @@
     enteredPin = '';
     updateAllPinBoxes();
     document.getElementById('excelPasswordDisplay').classList.remove('error');
-    document.getElementById('excelModal').classList.add('active');
+    showModal('excelModal');
     setTimeout(() => openExcelNumpad(), 100);
   }
 
@@ -2064,8 +2089,6 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
   }
-
-  function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
   function formatDateShort(d) {
     const pad = n => String(n).padStart(2, '0');
