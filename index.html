@@ -497,7 +497,6 @@
           <div style="display:flex; gap:4px;">
             <button class="btn btn-primary btn-sm" onclick="openOdevIstatistikModal()" style="background:#4a3f8a; color:#fff; border:none; padding:4px 8px; font-size:11px;">📊 İstatistikler</button>
             <input type="text" id="o_search" placeholder="Ara..." style="padding:4px 6px; border:1px solid var(--border); border-radius:4px; font-size:0.75rem; width:80px;" oninput="odevRender()">
-            <button class="btn btn-danger btn-sm" onclick="odevTemizle()" style="padding:4px 8px; font-size:11px;">Sil</button>
           </div>
         </div>
 
@@ -837,7 +836,7 @@
   const DEFAULT_SOURCES = ["Bilfen Soru Bankası","Mozaik Yayınları","Fenomen Yayıncılık","Sinan Kuzucu Yayınları","Ankara Yayıncılık","Sonuç Yayınları","HiperZeka","Nartest","Arı Yayıncılık","Karakutu Yayınları","Ata Yayıncılık","Tudem Yayınları","Karekök Yayınları","Hız Yayınları"];
 
   let odevRecords = []; 
-  let odevCustomSources = JSON.parse(localStorage.getItem('odevTakip_sources_v19') || '[]');
+  let odevCustomSources = JSON.parse(localStorage.getItem('odevTakip_sources_v20') || '[]');
   
   let currentSlideIndex = 0;
   let currentSliderList = [];
@@ -1040,7 +1039,7 @@
       return;
     }
     odevCustomSources.push(cleanSource);
-    localStorage.setItem('odevTakip_sources_v19', JSON.stringify(odevCustomSources));
+    localStorage.setItem('odevTakip_sources_v20', JSON.stringify(odevCustomSources));
     odevRenderSources(cleanSource); 
   }
 
@@ -1185,7 +1184,7 @@
           ${!r.isEvaluated 
             ? `<button class="btn btn-warning" style="flex:1; background:#f59e0b; color:#fff; border:none; padding:6px; font-size:0.75rem;" onclick="odevOpenEval('${r.id}')">Değerlendir</button>` 
             : `<button class="btn btn-outline" style="flex:1; border:1px solid #e2e8f0; padding:6px; font-size:0.75rem;" onclick="odevOpenEval('${r.id}')">Düzenle</button>`}
-          <button class="btn btn-danger" style="width:32px; padding:6px; font-size:0.75rem;" onclick="odevDelete('${r.id}')">🗑️</button>
+          <button class="btn btn-danger" style="width:32px; padding:6px; font-size:0.75rem;" onclick="odevDelete('${r.id}', '${r.idNo}')">🗑️</button>
         </div>
       `;
       track.appendChild(card);
@@ -1271,27 +1270,19 @@
     showToast('Değerlendirme kaydedildi', 'success');
   }
 
-  async function odevDelete(id){
-    if(!confirm('Bu kayıt silinsin mi?')) return;
+  // SADECE MEVCUT KARTI SİLEN FONKSİYON
+  async function odevDelete(id, idNo){
+    if(!confirm(`Ödev #${idNo} silinecek. Onaylıyor musunuz?`)) return;
     const { error } = await sb.from('matematik_odevleri').delete().eq('id', id);
     if (error) { showToast('Silinemedi!', 'danger'); return; }
+    
+    // Silme başarılıysa slider'ı bir önceki karta kaydır (eğer son kart silindiyse)
+    if (currentSlideIndex >= currentSliderList.length - 1 && currentSlideIndex > 0) {
+      currentSlideIndex--;
+    }
+    
     await openOdevModal();
     showToast('Kayıt silindi', 'info');
-  }
-
-  async function odevTemizle(){
-    const activeStudentId = document.getElementById('entryStudent').value;
-    if(!activeStudentId) return;
-    
-    const count = odevRecords.filter(r=>String(r.studentId)===String(activeStudentId)).length;
-    if(!count){ alert('Kayıt yok.'); return; }
-    if(!confirm(`Öğrencinin ${count} kaydı silinecek. Emin misiniz?`)) return;
-
-    const { error } = await sb.from('matematik_odevleri').delete().eq('student_id', parseInt(activeStudentId));
-    if (error) { showToast('Silinemedi!', 'danger'); return; }
-
-    currentSlideIndex = 0;
-    await openOdevModal();
   }
 
   function fmtDate(d) { 
